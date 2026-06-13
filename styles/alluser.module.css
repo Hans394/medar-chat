@@ -1,0 +1,46 @@
+.alluser {
+  width: 80%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+.alluser_info {
+  width: 80%;
+  margin: 0 auto;
+  padding: 2rem 0;
+  border-bottom: 1px solid #CCFFBD;
+  margin-bottom: 3rem;
+}
+
+.alluser_info h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+/* Responsivitas untuk layar tablet */
+@media screen and (max-width: 1024px) {
+  .alluser {
+    grid-template-columns: repeat(2, 1fr);
+    width: 90%;
+  }
+  .alluser_info {
+    width: 90%;
+  }
+}
+
+/* Responsivitas untuk layar HP */
+@media screen and (max-width: 600px) {
+  .alluser {
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+  .alluser_info {
+    width: 90%;
+  }
+  .alluser_info h1 {
+    font-size: 2rem;
+  }
+}

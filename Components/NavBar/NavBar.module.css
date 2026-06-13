@@ -1,0 +1,458 @@
+.NavBar {
+  padding: 1rem 0;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.NavBar_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NavBar_box_right {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.NavBar_box_right_menu {
+  display: flex;
+  gap: 2rem;
+}
+
+.NavBar_box_right_menu_items_link {
+  text-decoration: none;
+  color: #CCFFBD;
+  font-weight: 500;
+  transition: all .3s ease-in;
+}
+
+.active_btn {
+  border-bottom: 2px solid #CCFFBD;
+}
+
+.NavBar_box_right_connect button {
+  background-color: #40394A;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.NavBar_box_right_connect button small {
+  font-size: 1rem;
+}
+
+/* HAMBURGER TOGGLE BUTTON */
+.NavBar_hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.hamburger_line {
+  width: 100%;
+  height: 2px;
+  background-color: #CCFFBD;
+  transition: all 0.3s ease;
+}
+
+.NavBar_hamburger .line_open:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.NavBar_hamburger .line_open:nth-child(2) {
+  opacity: 0;
+}
+
+.NavBar_hamburger .line_open:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* MOBILE DROPDOWN CONTAINER */
+.NavBar_mobile_dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #2a2235;
+  border: 1px solid rgba(204, 255, 189, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+.NavBar_mobile_menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.NavBar_mobile_menu_items {
+  padding: 0.5rem 0;
+}
+
+.active_mobile_btn {
+  border-left: 3px solid #CCFFBD;
+  padding-left: 0.8rem;
+}
+
+.NavBar_mobile_connect button {
+  background-color: #40394A;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.NavBar_mobile_connect button small {
+  font-size: 1rem;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .NavBar {
+    width: 90%;
+    padding: 0.5rem 0;
+  }
+  .NavBar_box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .NavBar_box_right {
+    display: none;
+  }
+  .NavBar_hamburger {
+    display: flex;
+  }
+}
+
+/* ========== NOTIFICATION STYLES ========== */
+
+/* Bell Button */
+.NavBar_notif_wrapper {
+  position: relative;
+}
+
+.NavBar_notif_bell {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #CCFFBD;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.NavBar_notif_bell:hover {
+  background: rgba(204, 255, 189, 0.1);
+  transform: scale(1.1);
+}
+
+/* Unread Badge */
+.NavBar_notif_badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: linear-gradient(135deg, #ff5252, #ff1744);
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  box-shadow: 0 2px 6px rgba(255, 23, 68, 0.4);
+  animation: badgePop 0.3s ease-out;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Notification Popup */
+.NavBar_notif_popup {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: -1rem;
+  width: 360px;
+  max-height: 420px;
+  background: rgba(42, 34, 53, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(204, 255, 189, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(204, 255, 189, 0.05);
+  z-index: 1000;
+  overflow: hidden;
+  animation: notifSlideIn 0.25s ease-out;
+}
+
+@keyframes notifSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Popup Header */
+.NavBar_notif_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem 0.75rem;
+  border-bottom: 1px solid rgba(204, 255, 189, 0.08);
+}
+
+.NavBar_notif_header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.NavBar_notif_clear {
+  background: none;
+  border: none;
+  color: #CCFFBD;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.NavBar_notif_clear:hover {
+  background: rgba(204, 255, 189, 0.1);
+}
+
+/* Notification List */
+.NavBar_notif_list {
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(204, 255, 189, 0.2) transparent;
+}
+
+.NavBar_notif_list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.NavBar_notif_list::-webkit-scrollbar-thumb {
+  background: rgba(204, 255, 189, 0.2);
+  border-radius: 4px;
+}
+
+/* Empty State */
+.NavBar_notif_empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  gap: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.NavBar_notif_empty p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* Individual Notification Item */
+.NavBar_notif_item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.NavBar_notif_item:hover {
+  background: rgba(204, 255, 189, 0.05);
+}
+
+.NavBar_notif_item:last-child {
+  border-bottom: none;
+}
+
+/* Unread Indicator */
+.NavBar_notif_unread {
+  background: rgba(204, 255, 189, 0.04);
+  border-left: 3px solid #CCFFBD;
+}
+
+.NavBar_notif_unread:hover {
+  background: rgba(204, 255, 189, 0.08);
+}
+
+/* Notification Icon */
+.NavBar_notif_icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, rgba(204, 255, 189, 0.12), rgba(140, 120, 200, 0.08));
+}
+
+/* Notification Content */
+.NavBar_notif_content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.NavBar_notif_title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #CCFFBD;
+}
+
+.NavBar_notif_text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Detail isi pesan di notifikasi */
+.NavBar_notif_detail {
+  font-size: 0.72rem;
+  color: rgba(204, 255, 189, 0.55);
+  font-style: italic;
+  line-height: 1.3;
+  margin-top: 0.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  padding: 0.25rem 0.5rem;
+  background: rgba(204, 255, 189, 0.05);
+  border-left: 2px solid rgba(204, 255, 189, 0.25);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Notification Timestamp */
+.NavBar_notif_time {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+/* Mobile Notification Row */
+.NavBar_mobile_notif_row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0;
+  cursor: pointer;
+  color: #CCFFBD;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+}
+
+.NavBar_mobile_notif_row:hover {
+  opacity: 0.8;
+}
+
+.NavBar_notif_badge_mobile {
+  background: linear-gradient(135deg, #ff5252, #ff1744);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Responsive popup on mobile */
+@media (max-width: 768px) {
+  .NavBar_notif_popup {
+    position: fixed;
+    top: 60px;
+    left: 5%;
+    right: 5%;
+    width: 90%;
+    max-height: 60vh;
+  }
+}
+
+/* ========== PROFILE PICTURE STYLES ========== */
+.NavBar_profile_img {
+  border-radius: 50%;
+  border: 2px solid #CCFFBD;
+  object-fit: cover;
+  box-shadow: 0 0 8px rgba(204, 255, 189, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.NavBar_box_right_connect button:hover .NavBar_profile_img,
+.NavBar_mobile_connect button:hover .NavBar_profile_img {
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(204, 255, 189, 0.7);
+  transform: scale(1.08);
+}

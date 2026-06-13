@@ -1,0 +1,73 @@
+.Error {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: grid;
+  place-items: center;
+  z-index: 10000;
+}
+
+.Error_box {
+  position: relative;
+  background-color: #1a1a1a;
+  padding: 3rem 2.5rem 2rem 2.5rem;
+  border-radius: 1rem;
+  text-align: center;
+  border: 1px solid #ff4b4b;
+  box-shadow: 0 10px 30px rgba(255, 75, 75, 0.15);
+  max-width: 450px;
+  width: 90%;
+}
+
+.Error_box h1 {
+  color: #ff4b4b;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.Error_box p {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.Error_box_close_x {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.Error_box_close_x:hover {
+  color: #ff4b4b;
+}
+
+.Error_close_btn {
+  background-color: #ff4b4b;
+  color: white;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(255, 75, 75, 0.2);
+}
+
+.Error_close_btn:hover {
+  background-color: #ff3333;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(255, 75, 75, 0.35);
+}
+
+.Error_close_btn:active {
+  transform: translateY(0);
+}

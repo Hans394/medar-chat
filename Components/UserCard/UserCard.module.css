@@ -1,0 +1,68 @@
+.UserCard {
+  background-color: #40394A;
+  border-radius: 1rem;
+  padding: 2rem;
+  position: relative;
+  transition: all 0.3s ease-in;
+  border: 1px solid transparent;
+}
+
+.UserCard:hover {
+  box-shadow: 0 0 20px #CCFFBD;
+  border: 1px solid #CCFFBD;
+}
+
+.UserCard_box {
+  text-align: center;
+}
+
+.UserCard_box_img {
+  border-radius: 50%;
+  border: 3px solid #CCFFBD;
+  object-fit: cover;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.UserCard:hover .UserCard_box_img {
+  transform: scale(1.05);
+  box-shadow: 0 0 18px rgba(204, 255, 189, 0.6);
+  border-color: #ffffff;
+}
+
+.UserCard_box_info h3 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  color: #fff;
+}
+
+.UserCard_box_info p {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 1.5rem;
+}
+
+.UserCard_box_info button {
+  background-color: #CCFFBD;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 0.5rem;
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease-in;
+}
+
+.UserCard_box_info button:hover {
+  background-color: #fff;
+}
+
+.number {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #CCFFBD;
+}
