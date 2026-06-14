@@ -77,7 +77,12 @@ export const convertTime = (time) => {
 // CONNECTING READ-ONLY (tidak butuh wallet, untuk baca data publik)
 export const connectingWithSmartContractReadOnly = () => {
   try {
-    const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
+    const isLocalhost = ChatAppAddress.toLowerCase() === "0x5fbdb2315678afecb367f032d93F642f64180aa3";
+    const rpcUrl = isLocalhost 
+      ? "http://127.0.0.1:8545" 
+      : "https://ethereum-sepolia-rpc.publicnode.com";
+
+    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
     const contract = fetchContract(provider);
     return contract;
   } catch (error) {
