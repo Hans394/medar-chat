@@ -118,6 +118,11 @@ const NavBar = () => {
       if (avatarVal.startsWith("data:") || avatarVal.startsWith("/") || avatarVal.startsWith("http")) {
         return avatarVal;
       }
+      if (avatarVal.startsWith("mockcid_") && typeof window !== "undefined") {
+        if (!localStorage.getItem(`mock_ipfs_${avatarVal}`)) {
+          return defaultAvatar;
+        }
+      }
       return `/api/ipfs?cid=${avatarVal}`;
     }
     return defaultAvatar;

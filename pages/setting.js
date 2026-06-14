@@ -345,7 +345,9 @@ const Setting = () => {
                       src={typeof selectedAvatar === "string"
                         ? (selectedAvatar.startsWith("data:") || selectedAvatar.startsWith("/") || selectedAvatar.startsWith("http")
                           ? selectedAvatar
-                          : `/api/ipfs?cid=${selectedAvatar}`)
+                          : (selectedAvatar.startsWith("mockcid_") && typeof window !== "undefined" && !localStorage.getItem(`mock_ipfs_${selectedAvatar}`)
+                            ? images.accountName
+                            : `/api/ipfs?cid=${selectedAvatar}`))
                         : (selectedAvatar !== null && selectedAvatar !== undefined && !isNaN(Number(selectedAvatar)) && Number(selectedAvatar) >= 0 && Number(selectedAvatar) < 10
                           ? avatarList[Number(selectedAvatar)]
                           : images.accountName)
