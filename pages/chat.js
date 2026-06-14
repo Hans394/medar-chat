@@ -8,13 +8,10 @@ import { Filter, Friend } from "../Components/index";
 const ChatPage = () => {
   const { 
     account, 
-    addFriends, 
     sendMessage, 
     readMessage, 
     friendLists, 
-    readUserMsg, 
     userName, 
-    userLists,
     friendMsg,
     isInitialising
   } = useContext(ChatAppContext);

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Style from "./NavBar.module.css";
 import { ChatAppContext } from "../../Context/ChatAppContext";
-import { Model, Error } from "../../Components/index";
+import { Error } from "../../Components/index";
 import images from "../../assets";
 
 const NavBar = () => {
@@ -17,7 +17,6 @@ const NavBar = () => {
 
   const router = useRouter();
 
-  // Bug #15 fix: Sinkronkan state active dengan router.pathname
   const getActiveIndexFromPath = (pathname) => {
     const pathMap = {
       "/alluser": 1,
@@ -29,8 +28,8 @@ const NavBar = () => {
   };
 
   const [active, setActive] = useState(() => getActiveIndexFromPath(router.pathname));
-  const [openModel, setOpenModel] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
 
   // Sinkronkan state active saat URL berubah (navigasi langsung, tombol back/forward)
   useEffect(() => {
@@ -41,8 +40,6 @@ const NavBar = () => {
     account,
     userName,
     userAvatar,
-    connectWallet,
-    createAccount,
     error,
     setError,
     notifications,
@@ -62,14 +59,12 @@ const NavBar = () => {
     }
   }, [account, router.pathname, isInitialising]);
 
-
-
   const handleNotifClick = async (notif) => {
     markNotificationRead(notif.id);
     setOpenNotif(false);
 
     if (notif.type === "message_received" && notif.address) {
-      setActive(2); // Set active menu item index to 2 (CHAT)
+      setActive(2);
       if (router.pathname !== "/chat") {
         await router.push("/chat");
       }
@@ -91,8 +86,6 @@ const NavBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // unreadCount sudah dihitung oleh useNotification hook dan di-expose via context
-
   const timeAgo = (date) => {
     const now = new Date();
     const diff = Math.floor((now - new Date(date)) / 1000);
@@ -111,9 +104,8 @@ const NavBar = () => {
     }
   };
 
-  // Tentukan avatar image berdasarkan pilihan user
   const avatarImages = [images.image1, images.image2, images.image3, images.image4, images.image5, images.image6, images.image7, images.image8, images.image9, images.image10];
-  
+
   const defaultAvatar = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23111111"/><circle cx="50" cy="37" r="17" fill="%23ffffff"/><path d="M20 78 C20 60, 30 55, 50 55 C70 55, 80 60, 80 78 Z" fill="%23ffffff"/></svg>`;
 
   const getAvatarUrl = (avatarVal) => {
@@ -131,19 +123,7 @@ const NavBar = () => {
     return defaultAvatar;
   };
 
-  const profileImg = userName
-    ? getAvatarUrl(userAvatar)
-    : images.create2;
-
-  // Wrapper: tutup modal hanya jika createAccount berhasil
-  const handleCreateAccount = async ({ name }) => {
-    const success = await createAccount({ name });
-    if (success) {
-      setOpenModel(false);
-    }
-  };
-
-  const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const profileImg = getAvatarUrl(userAvatar);
 
   // Sembunyikan NavBar ketika di halaman Selamat Datang (wallet belum terhubung)
   if (isInitialising || account === "") {
@@ -168,7 +148,7 @@ const NavBar = () => {
           <span className={`${Style.hamburger_line} ${openMobileMenu ? Style.line_open : ""}`}></span>
         </button>
 
-        {/* DESKTOP MENU (ALWAYS DISPLAYED ON LARGE SCREENS) */}
+        {/* DESKTOP MENU */}
         <div className={Style.NavBar_box_right}>
           <div className={Style.NavBar_box_right_menu}>
             {menuItems.map((el, i) => (
@@ -247,13 +227,10 @@ const NavBar = () => {
             )}
           </div>
 
-          <div className={Style.NavBar_box_right_connect}>
-            {account === "" ? (
-              <button onClick={() => connectWallet()}>
-                <span>Connect Wallet</span>
-              </button>
-            ) : (
-              <button onClick={() => setOpenModel(true)}>
+          {/* PROFILE BUTTON */}
+          {userName && (
+            <div className={Style.NavBar_box_right_connect}>
+              <button onClick={() => router.push({ pathname: "/setting", query: { section: "profile" } })}>
                 <Image
                   src={profileImg}
                   alt="Account"
@@ -262,10 +239,10 @@ const NavBar = () => {
                   className={Style.NavBar_profile_img}
                   unoptimized
                 />
-                <small>{userName || "Create Account"}</small>
+                <small>{userName}</small>
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -304,13 +281,10 @@ const NavBar = () => {
             )}
           </div>
 
-          <div className={Style.NavBar_mobile_connect}>
-            {account === "" ? (
-              <button onClick={() => { connectWallet(); setOpenMobileMenu(false); }}>
-                <span>Connect Wallet</span>
-              </button>
-            ) : (
-              <button onClick={() => { setOpenModel(true); setOpenMobileMenu(false); }}>
+          {/* MOBILE PROFILE BUTTON */}
+          {userName && (
+            <div className={Style.NavBar_mobile_connect}>
+              <button onClick={() => { router.push({ pathname: "/setting", query: { section: "profile" } }); setOpenMobileMenu(false); }}>
                 <Image
                   src={profileImg}
                   alt="Account"
@@ -319,23 +293,10 @@ const NavBar = () => {
                   className={Style.NavBar_profile_img}
                   unoptimized
                 />
-                <small>{userName || "Create Account"}</small>
+                <small>{userName}</small>
               </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* MODEL COMPONENT */}
-      {openModel && (
-        <div className={Style.modelBox}>
-          <Model
-            openBox={setOpenModel}
-            title="WELCOME TO"
-            head="CHAT DAPP"
-            info="Please register your name to start chatting"
-            functionName={handleCreateAccount}
-          />
+            </div>
+          )}
         </div>
       )}
 

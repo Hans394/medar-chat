@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 // INTERNAL IMPORT
 import Style from "../styles/setting.module.css";
@@ -9,6 +10,14 @@ import images from "../assets";
 const Setting = () => {
   const { userName, userAvatar, updateProfile, account, clearChatHistory, disconnectWallet, friendLists, notifSettingsRef } = useContext(ChatAppContext);
   const [activeSection, setActiveSection] = useState(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.section) {
+      setActiveSection(router.query.section);
+    }
+  }, [router.query.section]);
   const [displayName, setDisplayName] = useState(userName || "");
   const [selectedAvatar, setSelectedAvatar] = useState(userAvatar !== null ? userAvatar : null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
@@ -328,7 +337,7 @@ const Setting = () => {
                   {saveSuccess ? "✓ Saved!" : "Save"}
                 </button>
               </div>
-              
+
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.2rem", marginTop: "1rem" }}>
                 <div style={{ position: "relative", width: "120px", height: "120px" }}>
                   {selectedAvatar ? (

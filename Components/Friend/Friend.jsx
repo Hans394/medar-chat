@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import Style from "./Friend.module.css";
-import images from "../../assets";
 import Card from "./Card/Card";
 import Chat from "./Chat/Chat";
 
@@ -52,7 +50,7 @@ const Friend = ({ friendLists, readMessage, sendMessage, friendMsg, account, use
     })
     : [];
 
-  const hasActiveChat = chatData.address ? true : false;
+  const hasActiveChat = !!chatData.address;
 
   return (
     <div className={Style.Friend}>

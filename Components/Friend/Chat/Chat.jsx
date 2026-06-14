@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 // INTERNAL IMPORT
 import Style from "./Chat.module.css";
 import images from "../../../assets";
 import { convertTime } from "../../../Utils/apiFeature";
-import { Loader } from "../../index";
 import { ChatAppContext } from "../../../Context/ChatAppContext";
 import { uploadToIPFS } from "../../../Utils/ipfs";
 
@@ -163,7 +161,6 @@ const Chat = ({ sendMessage, friendMsg, chatData, account, userName, setChatData
   const [msg, setMsg] = useState("");
   const [msgSearchQuery, setMsgSearchQuery] = useState("");
   const [receiverAvatar, setReceiverAvatar] = useState(images.accountName);
-  const router = useRouter();
   const [isBlockedByReceiver, setIsBlockedByReceiver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [friendDisplayName, setFriendDisplayName] = useState(chatData.name || "");

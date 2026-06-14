@@ -105,8 +105,6 @@ const Contact = () => {
   const [newName, setNewName] = useState("");
   const [newAddress, setNewAddress] = useState("");
 
-
-
   // States for Blocked Contacts
   const [blockedList, setBlockedList] = useState([]);
 
@@ -134,8 +132,6 @@ const Contact = () => {
       alert("Contact blocked successfully.");
     }
   };
-
-
 
   // Handle Delete contact on blockchain
   const handleDeleteContact = async (pubkey) => {

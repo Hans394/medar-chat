@@ -41,7 +41,7 @@ const saveSeedCounts = (account, counts) => {
       `chat_msgcounts_${account.toLowerCase()}`,
       JSON.stringify(counts)
     );
-  } catch (e) {}
+  } catch (e) { }
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ export const useNotification = (
             `chat_notifications_${currentAcc.toLowerCase()}`,
             JSON.stringify(updated)
           );
-        } catch (err) {}
+        } catch (err) { }
       }
       return updated;
     });
@@ -145,7 +145,7 @@ export const useNotification = (
             `chat_notifications_${currentAcc.toLowerCase()}`,
             JSON.stringify(updated)
           );
-        } catch (err) {}
+        } catch (err) { }
       }
       return updated;
     });
@@ -158,7 +158,7 @@ export const useNotification = (
     if (typeof window !== "undefined") {
       try {
         localStorage.removeItem(`chat_notifications_${currentAcc.toLowerCase()}`);
-      } catch (err) {}
+      } catch (err) { }
     }
   };
 
@@ -181,7 +181,7 @@ export const useNotification = (
             `chat_notifications_${currentAcc.toLowerCase()}`,
             JSON.stringify(updated)
           );
-        } catch (err) {}
+        } catch (err) { }
       }
       return updated;
     });
@@ -325,7 +325,7 @@ export const useNotification = (
                 try {
                   const parsed = JSON.parse(savedProfile);
                   if (parsed.displayName) senderName = parsed.displayName;
-                } catch (e) {}
+                } catch (e) { }
               }
             }
             if (!senderName || senderName === "Error Loading Profile") {
@@ -358,7 +358,7 @@ export const useNotification = (
                       try {
                         const p = JSON.parse(saved);
                         if (p.chatPublicKey) friendPubKey = p.chatPublicKey;
-                      } catch (e) {}
+                      } catch (e) { }
                     }
                   }
 

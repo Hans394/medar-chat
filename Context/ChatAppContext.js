@@ -55,7 +55,6 @@ export const ChatAppProvider = ({ children }) => {
   const [userName, setUserName] = useState("");
   const [friendLists, setFriendLists] = useState([]);
   const [friendMsg, setFriendMsg] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [userLists, setUserLists] = useState([]);
   const [error, setError] = useState("");
   const [userAvatar, setUserAvatar] = useState(null);
@@ -107,10 +106,6 @@ export const ChatAppProvider = ({ children }) => {
       await readMessage(friendAddr, true);
     }
   );
-  // CHAT USER DATA
-  const [currentUserName, setCurrentUserName] = useState("");
-  const [currentUserAddress, setCurrentUserAddress] = useState("");
-
   const router = useRouter();
 
   // Get smart contract instance silently without popup (if wallet is connected)
@@ -614,12 +609,9 @@ export const ChatAppProvider = ({ children }) => {
       const connectAccount = account || await CheckIfWalletConnected();
       if (!connectAccount) return setError("Wallet not connected");
 
-      setLoading(true);
-
       // Force prompt user signature to generate encryption keys
       const keys = await deriveChatKeys(connectAccount, true);
       if (!keys) {
-        setLoading(false);
         return false;
       }
 
@@ -636,7 +628,6 @@ export const ChatAppProvider = ({ children }) => {
       // Simpan CID profil di blockchain
       const getCreatedUser = await contract.createAccount(profileCid);
       await getCreatedUser.wait();
-      setLoading(false);
 
       setUserName(name);
       setUserAvatar(resolvedAvatarIndex);
@@ -665,7 +656,6 @@ export const ChatAppProvider = ({ children }) => {
 
       return true;
     } catch (error) {
-      setLoading(false);
       setError(parseError(error));
       return false;
     }
@@ -676,7 +666,6 @@ export const ChatAppProvider = ({ children }) => {
     try {
       if (!name || !userAddress) return setError("Please provide name and address");
       const contract = await connectingWithSmartContract();
-      setLoading(true);
 
       // Tambahkan relasi on-chain (hanya alamat)
       const addMeAsFriend = await contract.addFriend(userAddress);
@@ -685,7 +674,6 @@ export const ChatAppProvider = ({ children }) => {
       // Update friend metadata IPFS untuk kedua user
       await updateFriendListOnIPFS(contract);
 
-      setLoading(false);
       await fetchData(account);
       await fetchAllUsers();
 
@@ -701,7 +689,6 @@ export const ChatAppProvider = ({ children }) => {
 
       router.push("/chat");
     } catch (error) {
-      setLoading(false);
       setError(parseError(error));
     }
   };
@@ -745,19 +732,16 @@ export const ChatAppProvider = ({ children }) => {
       if (!friendAddress) return setError("Please provide friend address");
 
       const contract = await connectingWithSmartContract();
-      setLoading(true);
       const tx = await contract.deleteFriend(friendAddress);
       await tx.wait();
 
       // Update friend metadata di IPFS
       await updateFriendListOnIPFS(contract);
 
-      setLoading(false);
       await fetchData(account);
       await fetchAllUsers();
       return true;
     } catch (error) {
-      setLoading(false);
       setError(parseError(error));
       return false;
     }
@@ -849,43 +833,10 @@ export const ChatAppProvider = ({ children }) => {
       // Simpan CID di blockchain (bukan teks pesan!)
       const addMessage = await contract.sendMessage(address, msgCid);
 
-      setLoading(true);
       await addMessage.wait();
-      setLoading(false);
       await readMessage(address);
     } catch (error) {
-      setLoading(false);
       setError(parseError(error));
-    }
-  };
-
-  // ─── READ USER INFO ───────────────────────────────────────────────────────────
-  const readUserMsg = async (userAddress) => {
-    try {
-      const contract = await connectingWithSmartContract();
-      const profileCid = await contract.getUserProfileCid(userAddress);
-      const profile = await resolveUserProfile(profileCid);
-      let finalName = profile.name;
-
-      // Fallback ke localStorage
-      if (!finalName || finalName === "Error Loading Profile") {
-        if (typeof window !== "undefined") {
-          const savedProfile =
-            localStorage.getItem(`profile_${userAddress.toLowerCase()}`) ||
-            localStorage.getItem(`profile_${userAddress}`);
-          if (savedProfile) {
-            try {
-              const parsed = JSON.parse(savedProfile);
-              if (parsed.displayName) finalName = parsed.displayName;
-            } catch (e) { }
-          }
-        }
-      }
-
-      setCurrentUserName(finalName || "");
-      setCurrentUserAddress(userAddress);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -1012,9 +963,7 @@ export const ChatAppProvider = ({ children }) => {
         addFriends,
         deleteFriend,
         sendMessage,
-        readUserMsg,
         connectWallet: handleConnectWallet,
-        CheckIfWalletConnected,
         account,
         userName,
         userAvatar,
@@ -1023,19 +972,14 @@ export const ChatAppProvider = ({ children }) => {
         disconnectWallet,
         friendLists,
         friendMsg,
-        loading,
         userLists,
         error,
         setError,
-        currentUserName,
-        currentUserAddress,
         chatPublicKey,
-        chatPrivateKey,
         activeFriendPubKey,
         deriveChatKeys,
         notifications,
         unreadCount,
-        addNotification,
         markNotificationRead,
         clearNotifications,
         markFriendNotificationsRead,

@@ -7,7 +7,7 @@ import images from "../../../assets";
 import { ChatAppContext } from "../../../Context/ChatAppContext";
 
 const Card = ({ el, i, readMessage, setChatData }) => {
-  const { account, notifications, markFriendNotificationsRead } = useContext(ChatAppContext);
+  const { notifications, markFriendNotificationsRead } = useContext(ChatAppContext);
   const defaultAvatar = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23111111"/><circle cx="50" cy="37" r="17" fill="%23ffffff"/><path d="M20 78 C20 60, 30 55, 50 55 C70 55, 80 60, 80 78 Z" fill="%23ffffff"/></svg>`;
 
   const getAvatarUrl = (avatarVal) => {
@@ -78,7 +78,7 @@ const Card = ({ el, i, readMessage, setChatData }) => {
         }
       }
     }
-  }, [el.pubkey, el.name, el.avatarIndex, i, account]);
+  }, [el.pubkey, el.name, el.avatarIndex, i]);
 
   return (
     <div
