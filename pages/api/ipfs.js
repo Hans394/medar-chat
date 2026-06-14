@@ -1,6 +1,15 @@
 import fs from "fs";
 import path from "path";
 
+// Batasi ukuran request body agar Next.js bisa memproses file/gambar profil hingga 50MB
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "50mb",
+    },
+  },
+};
+
 // Helper untuk mendeteksi content-type dari byte awal (magic numbers) atau pola teks
 function detectContentType(buffer) {
   if (buffer.length >= 4) {
