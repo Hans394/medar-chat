@@ -1,6 +1,12 @@
 import fs from "fs";
 import path from "path";
 
+// Global in-memory cache to ensure mock IPFS works even on read-only environments
+if (!global.mockIpfsCache) {
+  global.mockIpfsCache = new Map();
+}
+
+
 // Batasi ukuran request body agar Next.js bisa memproses file/gambar profil hingga 50MB
 export const config = {
   api: {
@@ -72,16 +78,30 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Invalid file path" });
       }
 
-      // 1. Cek cache lokal di disk server terlebih dahulu
-      if (fs.existsSync(resolvedPath)) {
-        const content = fs.readFileSync(resolvedPath);
-        const contentType = detectContentType(content);
+      // 1. Cek cache in-memory terlebih dahulu
+      if (global.mockIpfsCache.has(safeCid)) {
+        const content = global.mockIpfsCache.get(safeCid);
+        const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
+        const contentType = detectContentType(buffer);
         res.setHeader("Content-Type", contentType);
         res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-        return res.status(200).send(content);
+        return res.status(200).send(buffer);
       }
 
-      // Jika itu mock cid dan tidak ditemukan di server, return 404
+      // 2. Cek cache lokal di disk server
+      if (fs.existsSync(resolvedPath)) {
+        try {
+          const content = fs.readFileSync(resolvedPath);
+          const contentType = detectContentType(content);
+          res.setHeader("Content-Type", contentType);
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+          return res.status(200).send(content);
+        } catch (readErr) {
+          console.warn("Failed to read mock IPFS file from disk:", readErr);
+        }
+      }
+
+      // Jika itu mock cid dan tidak ditemukan di server/in-memory, return 404
       if (cid.startsWith("mockcid_")) {
         return res.status(404).json({ error: "Mock CID not found on server" });
       }
@@ -112,7 +132,8 @@ export default async function handler(req, res) {
             const arrayBuffer = await fetchRes.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
 
-            // Simpan konten yang di-fetch ke cache lokal disk server
+            // Simpan konten yang di-fetch ke cache in-memory dan disk server
+            global.mockIpfsCache.set(safeCid, buffer);
             try {
               if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
@@ -152,18 +173,24 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Invalid CID format" });
       }
 
-      const dir = path.join(process.cwd(), "public", "mock_ipfs");
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
+      // Simpan ke cache in-memory terlebih dahulu
+      global.mockIpfsCache.set(safeCid, content);
 
-      const filePath = path.join(dir, safeCid);
-      const resolvedPath = path.resolve(filePath);
-      if (!resolvedPath.startsWith(path.resolve(dir))) {
-        return res.status(400).json({ error: "Invalid file path" });
-      }
+      // Coba simpan ke disk server, tetapi jangan gagalkan request jika gagal karena masalah disk/permissions
+      try {
+        const dir = path.join(process.cwd(), "public", "mock_ipfs");
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
 
-      fs.writeFileSync(filePath, content, "utf8");
+        const filePath = path.join(dir, safeCid);
+        const resolvedPath = path.resolve(filePath);
+        if (resolvedPath.startsWith(path.resolve(dir))) {
+          fs.writeFileSync(filePath, content, "utf8");
+        }
+      } catch (diskErr) {
+        console.warn("Failed to write mock IPFS file to disk (falling back to memory-only):", diskErr);
+      }
 
       return res.status(200).json({ success: true, cid: safeCid });
     } catch (error) {

@@ -235,7 +235,7 @@ export const fetchFromIPFS = async (cid) => {
     // Fallback: If server proxy fails, try direct fetch from public gateways in client as absolute last resort
     try {
       const fallbackUrl = cid.startsWith("mockcid_")
-        ? `/mock_ipfs/${cid}`
+        ? `/api/ipfs?cid=${encodeURIComponent(cid)}`
         : `https://ipfs.io/ipfs/${cid}`;
       const res = await fetch(fallbackUrl);
       if (res.ok) {

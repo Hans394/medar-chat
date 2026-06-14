@@ -78,11 +78,38 @@ export const convertTime = (time) => {
 export const connectingWithSmartContractReadOnly = () => {
   try {
     const isLocalhost = ChatAppAddress.toLowerCase() === "0x5fbdb2315678afecb367f032d93F642f64180aa3";
-    const rpcUrl = isLocalhost 
-      ? "http://127.0.0.1:8545" 
-      : "https://ethereum-sepolia-rpc.publicnode.com";
 
-    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+    // 1. Coba gunakan window.ethereum jika sudah terhubung ke chain yang sesuai
+    if (typeof window !== "undefined" && window.ethereum) {
+      const targetChainId = isLocalhost ? "0x7a69" : "0xaa36a7"; // 31337 atau 11155111
+      if (window.ethereum.chainId === targetChainId) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        return fetchContract(provider);
+      }
+    }
+
+    // 2. Jika tidak ada window.ethereum atau chain id tidak cocok, gunakan RPC URL
+    if (isLocalhost) {
+      const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
+      return fetchContract(provider);
+    }
+
+    // List Sepolia RPC URLs fallback
+    const sepoliaRpcs = [
+      "https://ethereum-sepolia-rpc.publicnode.com",
+      "https://rpc2.sepolia.org",
+      "https://rpc.sepolia.org",
+      "https://sepolia.gateway.tenderly.co",
+      "https://gateway.tenderly.co/public/sepolia"
+    ];
+
+    const providerConfigs = sepoliaRpcs.map((url, index) => ({
+      provider: new ethers.providers.JsonRpcProvider(url),
+      priority: index + 1,
+      stallTimeout: 2000,
+    }));
+
+    const provider = new ethers.providers.FallbackProvider(providerConfigs);
     const contract = fetchContract(provider);
     return contract;
   } catch (error) {

@@ -37,8 +37,8 @@ const IPFSAttachment = ({ cid, fileName, fileType, openFilePreview }) => {
         }
 
         try {
-          console.log(`IPFSAttachment: Fetching /mock_ipfs/${cid} from server...`);
-          const res = await fetch(`/mock_ipfs/${cid}`);
+          console.log(`IPFSAttachment: Fetching /api/ipfs?cid=${cid} from server...`);
+          const res = await fetch(`/api/ipfs?cid=${encodeURIComponent(cid)}`);
           if (res.ok) {
             const dataUrl = await res.text();
             console.log(`IPFSAttachment: Successfully fetched content for CID ${cid}, length: ${dataUrl.length}`);
