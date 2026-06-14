@@ -18,6 +18,9 @@ export const config = {
 
 // Helper untuk mendeteksi content-type dari byte awal (magic numbers) atau pola teks
 function detectContentType(buffer) {
+  if (!buffer || typeof buffer.length !== "number" || buffer.length < 1) {
+    return "application/octet-stream";
+  }
   if (buffer.length >= 4) {
     // Check PNG magic bytes: 89 50 4E 47
     if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47) {
@@ -81,7 +84,16 @@ export default async function handler(req, res) {
       // 1. Cek cache in-memory terlebih dahulu
       if (global.mockIpfsCache.has(safeCid)) {
         const content = global.mockIpfsCache.get(safeCid);
-        const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
+        let buffer;
+        if (Buffer.isBuffer(content)) {
+          buffer = content;
+        } else if (typeof content === "string") {
+          buffer = Buffer.from(content);
+        } else if (content !== null && content !== undefined) {
+          buffer = Buffer.from(JSON.stringify(content));
+        } else {
+          buffer = Buffer.alloc(0);
+        }
         const contentType = detectContentType(buffer);
         res.setHeader("Content-Type", contentType);
         res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
