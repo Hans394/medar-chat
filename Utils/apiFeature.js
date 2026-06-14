@@ -94,12 +94,11 @@ export const connectingWithSmartContractReadOnly = () => {
       return fetchContract(provider);
     }
 
-    // List Sepolia RPC URLs fallback
+    // List Sepolia RPC URLs fallback (only those supporting CORS for browser origins)
     const sepoliaRpcs = [
       "https://ethereum-sepolia-rpc.publicnode.com",
-      "https://rpc2.sepolia.org",
-      "https://rpc.sepolia.org",
       "https://sepolia.gateway.tenderly.co",
+      "https://sepolia.drpc.org",
       "https://gateway.tenderly.co/public/sepolia"
     ];
 
