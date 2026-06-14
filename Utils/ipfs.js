@@ -48,6 +48,11 @@ export const fetchJSONFromIPFS = async (cid) => {
 export const uploadToIPFS = async (file) => {
   const pinataJwt = process.env.NEXT_PUBLIC_PINATA_JWT;
 
+  if (typeof window !== "undefined") {
+    console.log("DEBUG PINATA JWT: length =", pinataJwt ? pinataJwt.length : 0);
+    console.log("DEBUG PINATA JWT: start =", pinataJwt ? pinataJwt.substring(0, 15) : "none");
+  }
+
   if (pinataJwt && pinataJwt !== "YOUR_PINATA_JWT") {
     // Upload to Pinata IPFS
     try {
