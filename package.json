@@ -16,7 +16,7 @@
     "web3modal": "^1.9.9"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.15.12",
+    "@netlify/plugin-nextjs": "^4.41.6",
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "dotenv": "^17.4.2",
     "hardhat": "^2.12.0"
