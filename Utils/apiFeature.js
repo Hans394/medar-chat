@@ -81,7 +81,7 @@ export const connectingWithSmartContractReadOnly = () => {
 
     // 1. Coba gunakan window.ethereum jika sudah terhubung ke chain yang sesuai
     if (typeof window !== "undefined" && window.ethereum) {
-      const targetChainId = isLocalhost ? "0x7a69" : "0xaa36a7"; // 31337 atau 11155111
+      const targetChainId = isLocalhost ? "0x7a69" : "0x13882"; // 31337 atau 80002 (Polygon Amoy)
       if (window.ethereum.chainId === targetChainId) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         return fetchContract(provider);
@@ -94,15 +94,15 @@ export const connectingWithSmartContractReadOnly = () => {
       return fetchContract(provider);
     }
 
-    // List Sepolia RPC URLs fallback (only those supporting CORS for browser origins)
-    const sepoliaRpcs = [
-      "https://ethereum-sepolia-rpc.publicnode.com",
-      "https://sepolia.gateway.tenderly.co",
-      "https://sepolia.drpc.org",
-      "https://gateway.tenderly.co/public/sepolia"
+    // List Polygon Amoy RPC URLs fallback
+    const amoyRpcs = [
+      "https://polygon-amoy-bor-rpc.publicnode.com",
+      "https://polygon-amoy.drpc.org",
+      "https://polygon-amoy.gateway.tenderly.co",
+      "https://polygon-amoy.api.onfinality.io/public"
     ];
 
-    const providerConfigs = sepoliaRpcs.map((url, index) => ({
+    const providerConfigs = amoyRpcs.map((url, index) => ({
       provider: new ethers.providers.JsonRpcProvider(url),
       priority: index + 1,
       stallTimeout: 2000,

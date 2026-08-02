@@ -1,6 +1,6 @@
 
 import ChatAppABIData from "./ChatApp.json";
 
-export const ChatAppAddress = "0x3142702C24Bd2bD742537396b55525e570d33F16";
+export const ChatAppAddress = "0xE659107F0E8179CF645957EA9B6daEd9c8187E2F";
 
 export const ChatAppABI = ChatAppABIData;
