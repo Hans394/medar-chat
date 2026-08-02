@@ -849,6 +849,11 @@ export const ChatAppProvider = ({ children }) => {
       setAccount(walletAddress);
 
       const contract = await connectingWithSmartContract();
+      if (!contract) {
+        console.error("Contract connection failed");
+        setError("Gagal terhubung ke smart contract. Pastikan MetaMask di jaringan Polygon Amoy.");
+        return { account: walletAddress, registered: false };
+      }
       const registered = await contract.checkUserExist(walletAddress);
 
       if (registered) {
