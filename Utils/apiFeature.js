@@ -43,9 +43,25 @@ const fetchContract = (signerOrProvider) =>
 // CONNECTING WITH SMART CONTRACT
 export const connectingWithSmartContract = async () => {
   try {
+    // Pastikan di jaringan Polygon Amoy sebelum transaksi
+    await ensurePolygonAmoy();
+
     const web3modal = new Web3Modal();
     const connection = await web3modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
+
+    // Override gas fee untuk Polygon Amoy (minimum 25 Gwei, kita set 30 Gwei)
+    const originalGetFeeData = provider.getFeeData.bind(provider);
+    provider.getFeeData = async () => {
+      const feeData = await originalGetFeeData();
+      const minTip = ethers.utils.parseUnits("30", "gwei");
+      return {
+        ...feeData,
+        maxPriorityFeePerGas: feeData.maxPriorityFeePerGas?.lt(minTip) ? minTip : feeData.maxPriorityFeePerGas,
+        maxFeePerGas: feeData.maxFeePerGas?.lt(minTip) ? minTip.mul(2) : feeData.maxFeePerGas,
+      };
+    };
+
     const signer = provider.getSigner();
     const contract = fetchContract(signer);
 
