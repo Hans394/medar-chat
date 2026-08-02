@@ -94,21 +94,9 @@ export const connectingWithSmartContractReadOnly = () => {
       return fetchContract(provider);
     }
 
-    // List Polygon Amoy RPC URLs fallback
-    const amoyRpcs = [
-      "https://polygon-amoy-bor-rpc.publicnode.com",
-      "https://polygon-amoy.drpc.org",
-      "https://polygon-amoy.gateway.tenderly.co",
-      "https://polygon-amoy.api.onfinality.io/public"
-    ];
-
-    const providerConfigs = amoyRpcs.map((url, index) => ({
-      provider: new ethers.providers.JsonRpcProvider(url),
-      priority: index + 1,
-      stallTimeout: 2000,
-    }));
-
-    const provider = new ethers.providers.FallbackProvider(providerConfigs);
+    // Gunakan satu RPC provider yang stabil untuk menghindari rate limit (429)
+    const amoyRpcUrl = "https://polygon-amoy-bor-rpc.publicnode.com";
+    const provider = new ethers.providers.JsonRpcProvider(amoyRpcUrl);
     const contract = fetchContract(provider);
     return contract;
   } catch (error) {
